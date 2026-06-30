@@ -10,13 +10,7 @@ ALLOWED_EXTENSIONS = ("pdf", "jpg", "jpeg", "png")
 class BusinessDocumentation(Document):
 	def before_save(self):
 		self.validate_attachment_type()
-		self.validate_expiry()
 		self.guard_submitted_reference()
-
-	def validate_expiry(self):
-		"""Expiry date is mandatory whenever a document is attached."""
-		if self.attachment and not self.expiry:
-			frappe.throw("Expiry date is mandatory when uploading a document.")
 
 	def validate_attachment_type(self):
 		"""Attachment must be a PDF/JPG/JPEG/PNG file."""
