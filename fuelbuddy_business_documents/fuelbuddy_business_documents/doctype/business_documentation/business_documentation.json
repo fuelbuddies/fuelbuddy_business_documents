@@ -100,8 +100,7 @@
   {
    "fieldname": "expiry",
    "fieldtype": "Date",
-   "label": "Expiry",
-   "reqd": 1
+   "label": "Expiry"
   },
   {
    "fieldname": "remarks",
