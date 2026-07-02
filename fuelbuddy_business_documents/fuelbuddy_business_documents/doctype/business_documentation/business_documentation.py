@@ -4,25 +4,36 @@
 import frappe
 from frappe.model.document import Document
 
-ALLOWED_EXTENSIONS = ("pdf", "jpg", "jpeg", "png")
+# Shared "Fuelbuddy Settings" single (hosted in fuelbuddy_crm): the "document_required"
+# flag gates document enforcement across the deal flow. Same semantics as
+# fuelbuddy_finance_dossier's documents_required().
+FB_SETTINGS_DOCTYPE = "Fuelbuddy Settings"
+
+
+def documents_enforced():
+	"""True when Business Documents are enforced ("Document Required" in Fuelbuddy
+	Settings). Defaults to enforced when the flag has never been set. Read straight
+	from tabSingles because ``get_single_value`` casts a missing Check field to 0,
+	hiding "never set"."""
+	row = frappe.db.sql(
+		"select value from `tabSingles` where doctype=%s and field=%s",
+		(FB_SETTINGS_DOCTYPE, "document_required"),
+	)
+	if not row:
+		return True
+	return bool(frappe.utils.cint(row[0][0]))
 
 
 class BusinessDocumentation(Document):
 	def before_save(self):
-		self.validate_attachment_type()
 		self.guard_submitted_reference()
 
-	def validate_attachment_type(self):
-		"""Attachment must be a PDF/JPG/JPEG/PNG file."""
-		fname = (self.attachment or "").lower().split("?")[0]
-		ext = fname.rsplit(".", 1)[-1] if "." in fname else ""
-		if ext not in ALLOWED_EXTENSIONS:
-			frappe.throw(
-				f"Attachment must be a PDF, JPG, JPEG or PNG file (got: .{ext or '?'})"
-			)
-
 	def guard_submitted_reference(self):
-		"""Block uploading/changing documents on a submitted reference document."""
+		"""Block uploading/changing documents on a submitted reference document.
+		Not enforced when "Document Required" is off in Fuelbuddy Settings."""
+		if not documents_enforced():
+			return
+
 		if not (self.reference_doctype and self.reference_name):
 			return
 
