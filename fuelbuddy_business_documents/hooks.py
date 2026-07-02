@@ -263,7 +263,9 @@ fixtures = [
 	{"dt": "Client Script", "filters": [["name", "=", "Business Docs - Finance Dossier"]]},
 	{
 		"dt": "Server Script",
-		"filters": [["name", "in", ["business_doc_get_docs", "business_doc_add_version", "business_doc_expiry"]]],
+		"filters": [
+			["name", "in", ["business_doc_get_docs", "business_doc_add_version", "business_doc_force_save", "business_doc_expiry"]]
+		],
 	},
 ]
 
