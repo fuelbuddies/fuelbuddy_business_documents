@@ -64,7 +64,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Document Type",
-   "options": "TL\nVAT\nMANAGER_KYC\nCANCELLED_CHEQUE\nCREDIT_AGREEMENT\nSIGNED_CONTRACT\nINSURANCE_CERTIFICATE\nOthers"
+   "options": "TL\nVAT\nMANAGER_KYC\nCANCELLED_CHEQUE\nCREDIT_AGREEMENT\nSIGNED_CONTRACT\nINSURANCE_CERTIFICATE\nSOP\nOthers"
   },
   {
    "fieldname": "document_number",
