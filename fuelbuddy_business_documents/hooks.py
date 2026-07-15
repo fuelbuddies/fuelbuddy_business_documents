@@ -251,7 +251,8 @@ app_license = "mit"
 # --------
 # Persist the Business Documentation integration pieces that fuelbuddy_crm's
 # fixtures (filtered to CRM doctypes) cannot capture: the Finance Dossier
-# custom fields + client script, and the shared business_doc_* server scripts.
+# custom fields + client script. The document-panel endpoints and expiry sweep
+# live in fuelbuddy_business_documents.api (plain app code, not Server Scripts).
 fixtures = [
 	{
 		"dt": "Custom Field",
@@ -261,11 +262,11 @@ fixtures = [
 		],
 	},
 	{"dt": "Client Script", "filters": [["name", "=", "Business Docs - Finance Dossier"]]},
-	{
-		"dt": "Server Script",
-		"filters": [
-			["name", "in", ["business_doc_get_docs", "business_doc_add_version", "business_doc_force_save", "business_doc_expiry"]]
-		],
-	},
 ]
+
+scheduler_events = {
+	"daily": [
+		"fuelbuddy_business_documents.api.expire_documents",
+	],
+}
 
